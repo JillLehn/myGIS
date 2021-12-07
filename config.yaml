@@ -1,7 +1,7 @@
 baseurl: https://JillLehn.github.io/myGIS
 title: myGIS
 publishDir: docs
-theme: hugo-theme-clearwhite-gc
+theme: hugo-theme-cleanwhite-gc
 languageCode: en-us
 disqusShortname: ''
 googleAnalytics: ''
