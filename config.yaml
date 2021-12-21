@@ -1,5 +1,5 @@
 baseurl: https://JillLehn.github.io/myGIS
-title: myGIS
+title: GIS WiSe 2021/2022
 publishDir: docs
 theme: hugo-theme-cleanwhite-gc
 languageCode: en-us
