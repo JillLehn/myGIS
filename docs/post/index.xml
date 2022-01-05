@@ -17,16 +17,5 @@
 Read the ressources related to forest and identify those which you will use for attempting the task.Decide which algorithms and indices are adequate to answer the research questionApply and document this findings with on base of the scripts of the this unit experiencesThe research question we are concerned with is as follows:</description>
     </item>
     
-    <item>
-      <title>Hello R Markdown</title>
-      <link>https://JillLehn.github.io/myGIS/post/2020-12-01-r-rmarkdown/</link>
-      <pubDate>Tue, 01 Dec 2020 21:13:14 -0500</pubDate>
-      
-      <guid>https://JillLehn.github.io/myGIS/post/2020-12-01-r-rmarkdown/</guid>
-      <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</description>
-    </item>
-    
   </channel>
 </rss>
