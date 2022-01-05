@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tasks on GIS WiSe 2021/2022</title>
+    <link>https://JillLehn.github.io/myGIS/tags/tasks/</link>
+    <description>Recent content in Tasks on GIS WiSe 2021/2022</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 05 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://JillLehn.github.io/myGIS/tags/tasks/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Deriving ecological indices from LiDAR data</title>
+      <link>https://JillLehn.github.io/myGIS/post/2022-01-05-deriving-ecological-indices-from-lidar-data/</link>
+      <pubDate>Wed, 05 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://JillLehn.github.io/myGIS/post/2022-01-05-deriving-ecological-indices-from-lidar-data/</guid>
+      <description>Assessment: LiDAR based Forest IndicesThe task of this Assessment is as follows:
+Read the ressources related to forest and identify those which you will use for attempting the task.Decide which algorithms and indices are adequate to answer the research questionApply and document this findings with on base of the scripts of the this unit experiencesThe research question we are concerned with is as follows:</description>
+    </item>
+    
+  </channel>
+</rss>

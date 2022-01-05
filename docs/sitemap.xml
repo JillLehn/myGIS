@@ -2,34 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://JillLehn.github.io/myGIS/post/about/</loc>
-    <lastmod>2021-07-16T11:24:06+08:00</lastmod>
-  </url><url>
-    <loc>https://JillLehn.github.io/myGIS/post/instruction/</loc>
-    <lastmod>2021-07-19T10:52:59+08:00</lastmod>
-  </url><url>
-    <loc>https://JillLehn.github.io/myGIS/post/markdown-syntax/</loc>
-    <lastmod>2021-07-18T10:52:59+08:00</lastmod>
-  </url><url>
-    <loc>https://JillLehn.github.io/myGIS/post/math-typesetting/</loc>
-    <lastmod>2021-07-18T10:52:59+08:00</lastmod>
-  </url><url>
-    <loc>https://JillLehn.github.io/myGIS/post/mermaid-graphs/</loc>
-    <lastmod>2021-07-18T10:52:59+08:00</lastmod>
-  </url><url>
     <loc>https://JillLehn.github.io/myGIS/top/archive/</loc>
   </url><url>
+    <loc>https://JillLehn.github.io/myGIS/post/2022-01-05-deriving-ecological-indices-from-lidar-data/</loc>
+    <lastmod>2022-01-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://JillLehn.github.io/myGIS/categories/assessments/</loc>
+    <lastmod>2022-01-05T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://JillLehn.github.io/myGIS/categories/</loc>
-    <lastmod>2021-07-19T10:52:59+08:00</lastmod>
+    <lastmod>2022-01-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://JillLehn.github.io/myGIS/</loc>
-    <lastmod>2021-07-19T10:52:59+08:00</lastmod>
-  </url><url>
-    <loc>https://JillLehn.github.io/myGIS/categories/help/</loc>
-    <lastmod>2021-07-19T10:52:59+08:00</lastmod>
+    <lastmod>2022-01-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://JillLehn.github.io/myGIS/post/</loc>
-    <lastmod>2021-07-19T10:52:59+08:00</lastmod>
+    <lastmod>2022-01-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://JillLehn.github.io/myGIS/tags/</loc>
+    <lastmod>2022-01-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://JillLehn.github.io/myGIS/tags/tasks/</loc>
+    <lastmod>2022-01-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://JillLehn.github.io/myGIS/post/2020-12-01-r-rmarkdown/</loc>
     <lastmod>2020-12-01T21:13:14-05:00</lastmod>
@@ -44,9 +38,6 @@
     <lastmod>2020-12-01T21:13:14-05:00</lastmod>
   </url><url>
     <loc>https://JillLehn.github.io/myGIS/tags/regression/</loc>
-    <lastmod>2020-12-01T21:13:14-05:00</lastmod>
-  </url><url>
-    <loc>https://JillLehn.github.io/myGIS/tags/</loc>
     <lastmod>2020-12-01T21:13:14-05:00</lastmod>
   </url><url>
     <loc>https://JillLehn.github.io/myGIS/search/placeholder/</loc>
