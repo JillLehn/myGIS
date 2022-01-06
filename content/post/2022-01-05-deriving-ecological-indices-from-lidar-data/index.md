@@ -47,20 +47,365 @@ They also mentioned the crown patchness (CP), which is an index considered both 
 Another paper of Greiser et al.(2018) deals with microclimate studies in a managed boreal forest landscape. They quantified the influence of vegetation features and physiography on understory temperatures. The study shows that during the warm season, where the microclimate variability is largest, the both indices canopy cover and basal area were the most important microclimate drivers for especially the minimum and maximum temperatures. The physiographic drivers, especially elevation, dominated maximum temperatures during autumn and early winter (Greiser et al. 2018).So it can also be useful to use a digital elevation model (DEM) to predict the microclimate parameters in a forest, especially as mentioned above in the seasons when deciduous trees have no leaves.
 
 
-## Results
+## Apply and document this findings with on base of the scripts of the this unit experiences
 
-Describe your results with respect to the choosen Approach and with respect to the leading question 
+The paper of Roussel et al. (2021) deals with the usage of the lidR-package and especially from chapter 8 with derived metrics, which can be used for this task. 
 
-## Discussion
-Take your research question and your results and discuss the results with respect to your approach
+
+```r
+# 0 - specific setup
+#-----------------------------
+knitr::knit_global()
+```
+
+```
+## <environment: R_GlobalEnv>
+```
+
+```r
+require(envimaR)
+```
+
+```
+## Lade nötiges Paket: envimaR
+```
+
+```r
+# MANDANTORY: defining the root folder DO NOT change this line
+rootDIR = "D:/MSc_Physische_Geographie/GIS/edu/agis"
+
+# define  additional packages
+appendpackagesToLoad = c("lidR")
+# define additional subfolders
+appendProjectDirList =  c("data/lidar_org/normalized/")
+
+
+# MANDANTORY: calling the setup script also DO NOT change this line
+source(file.path(envimaR::alternativeEnvi(root_folder = rootDIR),"src/agis_setup.R"), 
+       echo = FALSE,
+       local = knitr::knit_global())
+```
+
+```
+## variable alt_env_id is NOT defined
+##  'COMPUTERNAME' is set by defaultvariable alt_env_value is NOT defined
+##  'PCRZP' is set by defaultvariable alt_env_root_folder is NOT defined
+##  'F:/BEN/edu' is set by default
+```
+
+```
+## Lade nötiges Paket: mapview
+```
+
+```
+## Lade nötiges Paket: mapedit
+```
+
+```
+## Lade nötiges Paket: tmap
+```
+
+```
+## Registered S3 methods overwritten by 'stars':
+##   method             from
+##   st_bbox.SpatRaster sf  
+##   st_crs.SpatRaster  sf
+```
+
+```
+## Lade nötiges Paket: raster
+```
+
+```
+## Lade nötiges Paket: sp
+```
+
+```
+## Lade nötiges Paket: sf
+```
+
+```
+## Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1
+```
+
+```
+## Lade nötiges Paket: dplyr
+```
+
+```
+## 
+## Attache Paket: 'dplyr'
+```
+
+```
+## Die folgenden Objekte sind maskiert von 'package:raster':
+## 
+##     intersect, select, union
+```
+
+```
+## Die folgenden Objekte sind maskiert von 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## Die folgenden Objekte sind maskiert von 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```
+## Lade nötiges Paket: tidyverse
+```
+
+```
+## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+```
+
+```
+## v ggplot2 3.3.5     v purrr   0.3.4
+## v tibble  3.1.5     v stringr 1.4.0
+## v tidyr   1.1.4     v forcats 0.5.1
+## v readr   2.0.2
+```
+
+```
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x tidyr::extract() masks raster::extract()
+## x dplyr::filter()  masks stats::filter()
+## x dplyr::lag()     masks stats::lag()
+## x dplyr::select()  masks raster::select()
+```
+
+```
+## Lade nötiges Paket: RStoolbox
+```
+
+```
+## Lade nötiges Paket: randomForest
+```
+
+```
+## randomForest 4.6-14
+```
+
+```
+## Type rfNews() to see new features/changes/bug fixes.
+```
+
+```
+## 
+## Attache Paket: 'randomForest'
+```
+
+```
+## Das folgende Objekt ist maskiert 'package:ggplot2':
+## 
+##     margin
+```
+
+```
+## Das folgende Objekt ist maskiert 'package:dplyr':
+## 
+##     combine
+```
+
+```
+## Lade nötiges Paket: e1071
+```
+
+```
+## 
+## Attache Paket: 'e1071'
+```
+
+```
+## Das folgende Objekt ist maskiert 'package:raster':
+## 
+##     interpolate
+```
+
+```
+## Lade nötiges Paket: caret
+```
+
+```
+## Lade nötiges Paket: lattice
+```
+
+```
+## 
+## Attache Paket: 'caret'
+```
+
+```
+## Das folgende Objekt ist maskiert 'package:purrr':
+## 
+##     lift
+```
+
+```
+## Lade nötiges Paket: lidR
+```
+
+```r
+# 1 - start script
+#-----------------------------
+
+#read a small .las file from the already existing las-catalog
+
+las <- readLAS(file.path(envrmt$path_data, "10_norm.las"))
+
+epsg_number = 25832
+
+crs(las) <- epsg_number
+
+las
+```
+
+```
+## class        : LAS (v1.3 format 1)
+## memory       : 224.4 Mb 
+## extent       : 477500, 477750, 5632250, 5632500 (xmin, xmax, ymin, ymax)
+## coord. ref.  : ETRS89 / UTM zone 32N 
+## area         : 62498.92 m²
+## points       : 2.94 million points
+## density      : 47.06 points/m²
+```
+
+I start to calculate the metrics at the cloud level, which are using all available points. 
+
+
+```r
+#calculate the mean height
+
+cloud_metrics(las, func = ~mean(Z))
+```
+
+```
+## [1] 14.54
+```
+
+```r
+#Now calculate a few other metrics. The computed metrics are returned as a list.
+
+metrics <- cloud_metrics(las, func = .stdmetrics_z)
+head(metrics)
+```
+
+```
+## $zmax
+## [1] 39.639
+## 
+## $zmean
+## [1] 14.54
+## 
+## $zsd
+## [1] 11.47443
+## 
+## $zskew
+## [1] -0.0861508
+## 
+## $zkurt
+## [1] 1.545214
+## 
+## $zentropy
+## [1] NA
+```
+
+It is also possible to derive the metrics at the grid level.
+For example, to calculate the average height (mean(Z)) of all points within 1 x 1 m pixels
+
+
+```r
+hmean <- grid_metrics(las, ~mean(Z), 1) # calculate mean at 1 m
+
+plot(hmean, col = height.colors(50))
+```
+
+<img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+
+```r
+hmean
+```
+
+```
+## class      : RasterLayer 
+## dimensions : 250, 250, 62500  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : 477500, 477750, 5632250, 5632500  (xmin, xmax, ymin, ymax)
+## crs        : +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+## source     : memory
+## names      : V1 
+## values     : -0.200913, 37.01462  (min, max)
+```
+
+The stdmetrics()-function contains metrics that summarize the vertical distribution of points, their intensities, and return structure.
+
+```r
+metrics <- grid_metrics(las, .stdmetrics, 10) # calculate standard metrics
+plot(metrics, col = height.colors(50))
+```
+
+<img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+
+With the grid metrics it is also possible to calculate the density. The point density  is the number of points within a pixel divided by the area of the pixel (Roussel et al. 2021).
+
+
+```r
+density <- grid_metrics(las, ~length(Z)/1, 1) # calculate density
+plot(density, col = gray.colors(50,0,1)) # some plotting
+```
+
+<img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+
+Next I will use the derived metrics at the voxel level.
+
+
+```r
+vox_met <- voxel_metrics(las, ~list(N = length(Z)), 4) # calculate voxel metrics
+
+plot(vox_met, color="N", colorPalette = heat.colors(50), size = 4, bg = "white", voxel = T)
+```
+
+As mentioned in Greiser et al. (2018) the elevation can influence the microclimate parameters. Because of that I will generate a digital terrain model (DTM).
+
+```r
+dtm <- grid_terrain(las, res = 1.0, algorithm = lidR::knnidw(k = 6L, p = 2))
+```
+
+```
+## Warning: There were 3 degenerated ground points. Some X Y coordinates were
+## repeated but with different Z coordinates. min Z were retained.
+```
+
+```r
+dtm
+```
+
+```
+## class      : RasterLayer 
+## dimensions : 250, 250, 62500  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : 477500, 477750, 5632250, 5632500  (xmin, xmax, ymin, ymax)
+## crs        : +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+## source     : memory
+## names      : Z 
+## values     : -0.219, 0.303  (min, max)
+```
+
+
 
 ## References
 
--del Río, M., Pretzsch, H., Alberdi, I., Bielak, K., Bravo, F., Brunner, A., Condés, S., Ducey, M.J., Fonseca, T., von Lüpke, N., Pach, M., Peric, S., Perot, T., Souidi, Z., Spathelf, P., Sterba, H., Tijardovic, M., Tomé, M., Vallet, P. & Bravo-Oviedo, A. (2016): Characterization of the structure, dynamics, and productivity of mixed-species stands: review and perspectives. Eur. J. Forest Res. 135, 23-49.
+- del Río, M., Pretzsch, H., Alberdi, I., Bielak, K., Bravo, F., Brunner, A., Condés, S., Ducey, M.J., Fonseca, T., von Lüpke, N., Pach, M., Peric, S., Perot, T., Souidi, Z., Spathelf, P., Sterba, H., Tijardovic, M., Tomé, M., Vallet, P. & Bravo-Oviedo, A. (2016): Characterization of the structure, dynamics, and productivity of mixed-species stands: review and perspectives. Eur. J. Forest Res. 135, 23-49.
 
--Greiser, C., Meineri, E., Luoto, M., Ehrlén, J. & K. Hylander (2018): Monthly microclimate models in a managed boreal forest landscape. In Agricultural and Forest Meteorology 250 - 251 (2018) 147 - 158. doi:10.1016/j.agrformet.2017.12.252.
+- Greiser, C., Meineri, E., Luoto, M., Ehrlén, J. & K. Hylander (2018): Monthly microclimate models in a managed boreal forest landscape. In Agricultural and Forest Meteorology 250 - 251 (2018) 147 - 158. doi:10.1016/j.agrformet.2017.12.252.
 
--Hashimoto, H., Imanishi, J., Hagiwara, A., Morimoto, Y., & K. Kitada (2004): Estimating forest structure indices for evaluation of forest bird habitats by an airbone laser scanner.In M. Thies, B. Koch, H. Spiecker, & H. Weinacker (Eds.), Laser scanners for forest and landscape assessment: Proceedings of the ISPRS Working Group VIII/2, Freiburg, 3-6 October 2004, 254-258.
+- Hashimoto, H., Imanishi, J., Hagiwara, A., Morimoto, Y., & K. Kitada (2004): Estimating forest structure indices for evaluation of forest bird habitats by an airbone laser scanner.In M. Thies, B. Koch, H. Spiecker, & H. Weinacker (Eds.), Laser scanners for forest and landscape assessment: Proceedings of the ISPRS Working Group VIII/2, Freiburg, 3-6 October 2004, 254-258.
+
+- Roussel, J.-R., Goodbody, T.R.H. & P. Tompalski (2021): The lidR package. https://jean-romain.github.io/lidRbook/index.html
 
 
 

@@ -44,17 +44,184 @@ The horizontal spatial pattern is an important attribute of stand structure and 
 They also mentioned the crown patchness (CP), which is an index considered both the vertical and horizontal diversity of foliage distribution (Hashimoto et al. 2004).</p>
 <p>Another paper of Greiser et al.(2018) deals with microclimate studies in a managed boreal forest landscape. They quantified the influence of vegetation features and physiography on understory temperatures. The study shows that during the warm season, where the microclimate variability is largest, the both indices canopy cover and basal area were the most important microclimate drivers for especially the minimum and maximum temperatures. The physiographic drivers, especially elevation, dominated maximum temperatures during autumn and early winter (Greiser et al. 2018).So it can also be useful to use a digital elevation model (DEM) to predict the microclimate parameters in a forest, especially as mentioned above in the seasons when deciduous trees have no leaves.</p>
 </div>
-<div id="results" class="section level2">
-<h2>Results</h2>
-<p>Describe your results with respect to the choosen Approach and with respect to the leading question</p>
-</div>
-<div id="discussion" class="section level2">
-<h2>Discussion</h2>
-<p>Take your research question and your results and discuss the results with respect to your approach</p>
+<div id="apply-and-document-this-findings-with-on-base-of-the-scripts-of-the-this-unit-experiences" class="section level2">
+<h2>Apply and document this findings with on base of the scripts of the this unit experiences</h2>
+<p>The paper of Roussel et al. (2021) deals with the usage of the lidR-package and especially from chapter 8 with derived metrics, which can be used for this task.</p>
+<pre class="r"><code># 0 - specific setup
+#-----------------------------
+knitr::knit_global()</code></pre>
+<pre><code>## &lt;environment: R_GlobalEnv&gt;</code></pre>
+<pre class="r"><code>require(envimaR)</code></pre>
+<pre><code>## Lade nötiges Paket: envimaR</code></pre>
+<pre class="r"><code># MANDANTORY: defining the root folder DO NOT change this line
+rootDIR = &quot;D:/MSc_Physische_Geographie/GIS/edu/agis&quot;
+
+# define  additional packages
+appendpackagesToLoad = c(&quot;lidR&quot;)
+# define additional subfolders
+appendProjectDirList =  c(&quot;data/lidar_org/normalized/&quot;)
+
+
+# MANDANTORY: calling the setup script also DO NOT change this line
+source(file.path(envimaR::alternativeEnvi(root_folder = rootDIR),&quot;src/agis_setup.R&quot;), 
+       echo = FALSE,
+       local = knitr::knit_global())</code></pre>
+<pre><code>## variable alt_env_id is NOT defined
+##  &#39;COMPUTERNAME&#39; is set by defaultvariable alt_env_value is NOT defined
+##  &#39;PCRZP&#39; is set by defaultvariable alt_env_root_folder is NOT defined
+##  &#39;F:/BEN/edu&#39; is set by default</code></pre>
+<pre><code>## Lade nötiges Paket: mapview</code></pre>
+<pre><code>## Lade nötiges Paket: mapedit</code></pre>
+<pre><code>## Lade nötiges Paket: tmap</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;stars&#39;:
+##   method             from
+##   st_bbox.SpatRaster sf  
+##   st_crs.SpatRaster  sf</code></pre>
+<pre><code>## Lade nötiges Paket: raster</code></pre>
+<pre><code>## Lade nötiges Paket: sp</code></pre>
+<pre><code>## Lade nötiges Paket: sf</code></pre>
+<pre><code>## Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1</code></pre>
+<pre><code>## Lade nötiges Paket: dplyr</code></pre>
+<pre><code>## 
+## Attache Paket: &#39;dplyr&#39;</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:raster&#39;:
+## 
+##     intersect, select, union</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre><code>## Lade nötiges Paket: tidyverse</code></pre>
+<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
+<pre><code>## v ggplot2 3.3.5     v purrr   0.3.4
+## v tibble  3.1.5     v stringr 1.4.0
+## v tidyr   1.1.4     v forcats 0.5.1
+## v readr   2.0.2</code></pre>
+<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x tidyr::extract() masks raster::extract()
+## x dplyr::filter()  masks stats::filter()
+## x dplyr::lag()     masks stats::lag()
+## x dplyr::select()  masks raster::select()</code></pre>
+<pre><code>## Lade nötiges Paket: RStoolbox</code></pre>
+<pre><code>## Lade nötiges Paket: randomForest</code></pre>
+<pre><code>## randomForest 4.6-14</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<pre><code>## 
+## Attache Paket: &#39;randomForest&#39;</code></pre>
+<pre><code>## Das folgende Objekt ist maskiert &#39;package:ggplot2&#39;:
+## 
+##     margin</code></pre>
+<pre><code>## Das folgende Objekt ist maskiert &#39;package:dplyr&#39;:
+## 
+##     combine</code></pre>
+<pre><code>## Lade nötiges Paket: e1071</code></pre>
+<pre><code>## 
+## Attache Paket: &#39;e1071&#39;</code></pre>
+<pre><code>## Das folgende Objekt ist maskiert &#39;package:raster&#39;:
+## 
+##     interpolate</code></pre>
+<pre><code>## Lade nötiges Paket: caret</code></pre>
+<pre><code>## Lade nötiges Paket: lattice</code></pre>
+<pre><code>## 
+## Attache Paket: &#39;caret&#39;</code></pre>
+<pre><code>## Das folgende Objekt ist maskiert &#39;package:purrr&#39;:
+## 
+##     lift</code></pre>
+<pre><code>## Lade nötiges Paket: lidR</code></pre>
+<pre class="r"><code># 1 - start script
+#-----------------------------
+
+#read a small .las file from the already existing las-catalog
+
+las &lt;- readLAS(file.path(envrmt$path_data, &quot;10_norm.las&quot;))
+
+epsg_number = 25832
+
+crs(las) &lt;- epsg_number
+
+las</code></pre>
+<pre><code>## class        : LAS (v1.3 format 1)
+## memory       : 224.4 Mb 
+## extent       : 477500, 477750, 5632250, 5632500 (xmin, xmax, ymin, ymax)
+## coord. ref.  : ETRS89 / UTM zone 32N 
+## area         : 62498.92 m²
+## points       : 2.94 million points
+## density      : 47.06 points/m²</code></pre>
+<p>I start to calculate the metrics at the cloud level, which are using all available points.</p>
+<pre class="r"><code>#calculate the mean height
+
+cloud_metrics(las, func = ~mean(Z))</code></pre>
+<pre><code>## [1] 14.54</code></pre>
+<pre class="r"><code>#Now calculate a few other metrics. The computed metrics are returned as a list.
+
+metrics &lt;- cloud_metrics(las, func = .stdmetrics_z)
+head(metrics)</code></pre>
+<pre><code>## $zmax
+## [1] 39.639
+## 
+## $zmean
+## [1] 14.54
+## 
+## $zsd
+## [1] 11.47443
+## 
+## $zskew
+## [1] -0.0861508
+## 
+## $zkurt
+## [1] 1.545214
+## 
+## $zentropy
+## [1] NA</code></pre>
+<p>It is also possible to derive the metrics at the grid level.
+For example, to calculate the average height (mean(Z)) of all points within 1 x 1 m pixels</p>
+<pre class="r"><code>hmean &lt;- grid_metrics(las, ~mean(Z), 1) # calculate mean at 1 m
+
+plot(hmean, col = height.colors(50))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>hmean</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 250, 250, 62500  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : 477500, 477750, 5632250, 5632500  (xmin, xmax, ymin, ymax)
+## crs        : +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+## source     : memory
+## names      : V1 
+## values     : -0.200913, 37.01462  (min, max)</code></pre>
+<p>The stdmetrics()-function contains metrics that summarize the vertical distribution of points, their intensities, and return structure.</p>
+<pre class="r"><code>metrics &lt;- grid_metrics(las, .stdmetrics, 10) # calculate standard metrics
+plot(metrics, col = height.colors(50))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>With the grid metrics it is also possible to calculate the density. The point density is the number of points within a pixel divided by the area of the pixel (Roussel et al. 2021).</p>
+<pre class="r"><code>density &lt;- grid_metrics(las, ~length(Z)/1, 1) # calculate density
+plot(density, col = gray.colors(50,0,1)) # some plotting</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Next I will use the derived metrics at the voxel level.</p>
+<pre class="r"><code>vox_met &lt;- voxel_metrics(las, ~list(N = length(Z)), 4) # calculate voxel metrics
+
+plot(vox_met, color=&quot;N&quot;, colorPalette = heat.colors(50), size = 4, bg = &quot;white&quot;, voxel = T)</code></pre>
+<p>As mentioned in Greiser et al. (2018) the elevation can influence the microclimate parameters. Because of that I will generate a digital terrain model (DTM).</p>
+<pre class="r"><code>dtm &lt;- grid_terrain(las, res = 1.0, algorithm = lidR::knnidw(k = 6L, p = 2))</code></pre>
+<pre><code>## Warning: There were 3 degenerated ground points. Some X Y coordinates were
+## repeated but with different Z coordinates. min Z were retained.</code></pre>
+<pre class="r"><code>dtm</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 250, 250, 62500  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
+## extent     : 477500, 477750, 5632250, 5632500  (xmin, xmax, ymin, ymax)
+## crs        : +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+## source     : memory
+## names      : Z 
+## values     : -0.219, 0.303  (min, max)</code></pre>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
-<p>-del Río, M., Pretzsch, H., Alberdi, I., Bielak, K., Bravo, F., Brunner, A., Condés, S., Ducey, M.J., Fonseca, T., von Lüpke, N., Pach, M., Peric, S., Perot, T., Souidi, Z., Spathelf, P., Sterba, H., Tijardovic, M., Tomé, M., Vallet, P. &amp; Bravo-Oviedo, A. (2016): Characterization of the structure, dynamics, and productivity of mixed-species stands: review and perspectives. Eur. J. Forest Res. 135, 23-49.</p>
-<p>-Greiser, C., Meineri, E., Luoto, M., Ehrlén, J. &amp; K. Hylander (2018): Monthly microclimate models in a managed boreal forest landscape. In Agricultural and Forest Meteorology 250 - 251 (2018) 147 - 158. <a href="doi:10.1016/j.agrformet.2017.12.252" class="uri">doi:10.1016/j.agrformet.2017.12.252</a>.</p>
-<p>-Hashimoto, H., Imanishi, J., Hagiwara, A., Morimoto, Y., &amp; K. Kitada (2004): Estimating forest structure indices for evaluation of forest bird habitats by an airbone laser scanner.In M. Thies, B. Koch, H. Spiecker, &amp; H. Weinacker (Eds.), Laser scanners for forest and landscape assessment: Proceedings of the ISPRS Working Group VIII/2, Freiburg, 3-6 October 2004, 254-258.</p>
+<ul>
+<li><p>del Río, M., Pretzsch, H., Alberdi, I., Bielak, K., Bravo, F., Brunner, A., Condés, S., Ducey, M.J., Fonseca, T., von Lüpke, N., Pach, M., Peric, S., Perot, T., Souidi, Z., Spathelf, P., Sterba, H., Tijardovic, M., Tomé, M., Vallet, P. &amp; Bravo-Oviedo, A. (2016): Characterization of the structure, dynamics, and productivity of mixed-species stands: review and perspectives. Eur. J. Forest Res. 135, 23-49.</p></li>
+<li><p>Greiser, C., Meineri, E., Luoto, M., Ehrlén, J. &amp; K. Hylander (2018): Monthly microclimate models in a managed boreal forest landscape. In Agricultural and Forest Meteorology 250 - 251 (2018) 147 - 158. <a href="doi:10.1016/j.agrformet.2017.12.252" class="uri">doi:10.1016/j.agrformet.2017.12.252</a>.</p></li>
+<li><p>Hashimoto, H., Imanishi, J., Hagiwara, A., Morimoto, Y., &amp; K. Kitada (2004): Estimating forest structure indices for evaluation of forest bird habitats by an airbone laser scanner.In M. Thies, B. Koch, H. Spiecker, &amp; H. Weinacker (Eds.), Laser scanners for forest and landscape assessment: Proceedings of the ISPRS Working Group VIII/2, Freiburg, 3-6 October 2004, 254-258.</p></li>
+<li><p>Roussel, J.-R., Goodbody, T.R.H. &amp; P. Tompalski (2021): The lidR package. <a href="https://jean-romain.github.io/lidRbook/index.html" class="uri">https://jean-romain.github.io/lidRbook/index.html</a></p></li>
+</ul>
 </div>

@@ -49,20 +49,110 @@ They also mentioned the crown patchness (CP), which is an index considered both 
 Another paper of Greiser et al.(2018) deals with microclimate studies in a managed boreal forest landscape. They quantified the influence of vegetation features and physiography on understory temperatures. The study shows that during the warm season, where the microclimate variability is largest, the both indices canopy cover and basal area were the most important microclimate drivers for especially the minimum and maximum temperatures. The physiographic drivers, especially elevation, dominated maximum temperatures during autumn and early winter (Greiser et al. 2018).So it can also be useful to use a digital elevation model (DEM) to predict the microclimate parameters in a forest, especially as mentioned above in the seasons when deciduous trees have no leaves.
 
 
-## Results
+## Apply and document this findings with on base of the scripts of the this unit experiences
 
-Describe your results with respect to the choosen Approach and with respect to the leading question 
+The paper of Roussel et al. (2021) deals with the usage of the lidR-package and especially from chapter 8 with derived metrics, which can be used for this task. 
 
-## Discussion
-Take your research question and your results and discuss the results with respect to your approach
+```{r}
+# 0 - specific setup
+#-----------------------------
+knitr::knit_global()
+
+require(envimaR)
+
+# MANDANTORY: defining the root folder DO NOT change this line
+rootDIR = "D:/MSc_Physische_Geographie/GIS/edu/agis"
+
+# define  additional packages
+appendpackagesToLoad = c("lidR")
+# define additional subfolders
+appendProjectDirList =  c("data/lidar_org/normalized/")
+
+
+# MANDANTORY: calling the setup script also DO NOT change this line
+source(file.path(envimaR::alternativeEnvi(root_folder = rootDIR),"src/agis_setup.R"), 
+       echo = FALSE,
+       local = knitr::knit_global())
+
+# 1 - start script
+#-----------------------------
+
+#read a small .las file from the already existing las-catalog
+
+las <- readLAS(file.path(envrmt$path_data, "10_norm.las"))
+
+epsg_number = 25832
+
+crs(las) <- epsg_number
+
+las
+
+```
+
+I start to calculate the metrics at the cloud level, which are using all available points. 
+
+```{r}
+#calculate the mean height
+
+cloud_metrics(las, func = ~mean(Z))
+
+#Now calculate a few other metrics. The computed metrics are returned as a list.
+
+metrics <- cloud_metrics(las, func = .stdmetrics_z)
+head(metrics)
+
+```
+
+It is also possible to derive the metrics at the grid level.
+For example, to calculate the average height (mean(Z)) of all points within 1 x 1 m pixels
+
+```{r}
+hmean <- grid_metrics(las, ~mean(Z), 1) # calculate mean at 1 m
+
+plot(hmean, col = height.colors(50))
+
+hmean
+```
+
+The stdmetrics()-function contains metrics that summarize the vertical distribution of points, their intensities, and return structure.
+```{r, warning = FALSE}
+metrics <- grid_metrics(las, .stdmetrics, 10) # calculate standard metrics
+plot(metrics, col = height.colors(50))
+```
+
+With the grid metrics it is also possible to calculate the density. The point density  is the number of points within a pixel divided by the area of the pixel (Roussel et al. 2021).
+
+```{r}
+density <- grid_metrics(las, ~length(Z)/1, 1) # calculate density
+plot(density, col = gray.colors(50,0,1)) # some plotting
+```
+
+Next I will use the derived metrics at the voxel level.
+
+```{r}
+vox_met <- voxel_metrics(las, ~list(N = length(Z)), 4) # calculate voxel metrics
+
+plot(vox_met, color="N", colorPalette = heat.colors(50), size = 4, bg = "white", voxel = T)
+```
+
+As mentioned in Greiser et al. (2018) the elevation can influence the microclimate parameters. Because of that I will generate a digital terrain model (DTM).
+```{r}
+dtm <- grid_terrain(las, res = 1.0, algorithm = lidR::knnidw(k = 6L, p = 2))
+dtm
+
+```
+
+
 
 ## References
 
--del Río, M., Pretzsch, H., Alberdi, I., Bielak, K., Bravo, F., Brunner, A., Condés, S., Ducey, M.J., Fonseca, T., von Lüpke, N., Pach, M., Peric, S., Perot, T., Souidi, Z., Spathelf, P., Sterba, H., Tijardovic, M., Tomé, M., Vallet, P. & Bravo-Oviedo, A. (2016): Characterization of the structure, dynamics, and productivity of mixed-species stands: review and perspectives. Eur. J. Forest Res. 135, 23-49.
+- del Río, M., Pretzsch, H., Alberdi, I., Bielak, K., Bravo, F., Brunner, A., Condés, S., Ducey, M.J., Fonseca, T., von Lüpke, N., Pach, M., Peric, S., Perot, T., Souidi, Z., Spathelf, P., Sterba, H., Tijardovic, M., Tomé, M., Vallet, P. & Bravo-Oviedo, A. (2016): Characterization of the structure, dynamics, and productivity of mixed-species stands: review and perspectives. Eur. J. Forest Res. 135, 23-49.
 
--Greiser, C., Meineri, E., Luoto, M., Ehrlén, J. & K. Hylander (2018): Monthly microclimate models in a managed boreal forest landscape. In Agricultural and Forest Meteorology 250 - 251 (2018) 147 - 158. doi:10.1016/j.agrformet.2017.12.252.
+- Greiser, C., Meineri, E., Luoto, M., Ehrlén, J. & K. Hylander (2018): Monthly microclimate models in a managed boreal forest landscape. In Agricultural and Forest Meteorology 250 - 251 (2018) 147 - 158. doi:10.1016/j.agrformet.2017.12.252.
 
--Hashimoto, H., Imanishi, J., Hagiwara, A., Morimoto, Y., & K. Kitada (2004): Estimating forest structure indices for evaluation of forest bird habitats by an airbone laser scanner.In M. Thies, B. Koch, H. Spiecker, & H. Weinacker (Eds.), Laser scanners for forest and landscape assessment: Proceedings of the ISPRS Working Group VIII/2, Freiburg, 3-6 October 2004, 254-258.
+- Hashimoto, H., Imanishi, J., Hagiwara, A., Morimoto, Y., & K. Kitada (2004): Estimating forest structure indices for evaluation of forest bird habitats by an airbone laser scanner.In M. Thies, B. Koch, H. Spiecker, & H. Weinacker (Eds.), Laser scanners for forest and landscape assessment: Proceedings of the ISPRS Working Group VIII/2, Freiburg, 3-6 October 2004, 254-258.
+
+- Roussel, J.-R., Goodbody, T.R.H. & P. Tompalski (2021): The lidR package. https://jean-romain.github.io/lidRbook/index.html
 
 
 
