@@ -53,7 +53,7 @@ Another paper of Greiser et al.(2018) deals with microclimate studies in a manag
 
 The paper of Roussel et al. (2021) deals with the usage of the lidR-package and especially from chapter 8 with derived metrics, which can be used for this task. 
 
-```{r}
+```{r, message=FALSE}
 # 0 - specific setup
 #-----------------------------
 knitr::knit_global()
@@ -127,22 +127,21 @@ density <- grid_metrics(las, ~length(Z)/1, 1) # calculate density
 plot(density, col = gray.colors(50,0,1)) # some plotting
 ```
 
-Next I will use the derived metrics at the voxel level.
-
-```{r}
-vox_met <- voxel_metrics(las, ~list(N = length(Z)), 4) # calculate voxel metrics
-
-plot(vox_met, color="N", colorPalette = heat.colors(50), size = 4, bg = "white", voxel = T)
-```
 
 As mentioned in Greiser et al. (2018) the elevation can influence the microclimate parameters. Because of that I will generate a digital terrain model (DTM).
-```{r}
-dtm <- grid_terrain(las, res = 1.0, algorithm = lidR::knnidw(k = 6L, p = 2))
+```{r,warning = FALSE}
+dtm <- lidR::grid_terrain(las, res = 10.0, algorithm = lidR::knnidw(k = 6L, p = 2))
+
 dtm
+
+plot(dtm, col = height.colors(50), main = "DTM 10 m² cells")
 
 ```
 
+##Conclusion 
 
+Finally, I think that the derived metrics, especially at the grid level, can be used to predict the microclimate parameters. There are a lot of standard metrics, which can be used. Also the DTM can be useful to predict the microclimate parameters. 
+There are many others predictors as mentioned above, which can be used to obtain a reliable prediction of the microclimate parameters. In further computations it can be uselful to calculate for example the leaf area index (LAI),the foliage height diversity (FHD) or crown patchness (CP).
 
 ## References
 

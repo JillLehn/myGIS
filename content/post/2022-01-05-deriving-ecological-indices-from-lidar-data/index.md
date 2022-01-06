@@ -64,13 +64,7 @@ knitr::knit_global()
 
 ```r
 require(envimaR)
-```
 
-```
-## Lade nötiges Paket: envimaR
-```
-
-```r
 # MANDANTORY: defining the root folder DO NOT change this line
 rootDIR = "D:/MSc_Physische_Geographie/GIS/edu/agis"
 
@@ -91,162 +85,6 @@ source(file.path(envimaR::alternativeEnvi(root_folder = rootDIR),"src/agis_setup
 ##  'COMPUTERNAME' is set by defaultvariable alt_env_value is NOT defined
 ##  'PCRZP' is set by defaultvariable alt_env_root_folder is NOT defined
 ##  'F:/BEN/edu' is set by default
-```
-
-```
-## Lade nötiges Paket: mapview
-```
-
-```
-## Lade nötiges Paket: mapedit
-```
-
-```
-## Lade nötiges Paket: tmap
-```
-
-```
-## Registered S3 methods overwritten by 'stars':
-##   method             from
-##   st_bbox.SpatRaster sf  
-##   st_crs.SpatRaster  sf
-```
-
-```
-## Lade nötiges Paket: raster
-```
-
-```
-## Lade nötiges Paket: sp
-```
-
-```
-## Lade nötiges Paket: sf
-```
-
-```
-## Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1
-```
-
-```
-## Lade nötiges Paket: dplyr
-```
-
-```
-## 
-## Attache Paket: 'dplyr'
-```
-
-```
-## Die folgenden Objekte sind maskiert von 'package:raster':
-## 
-##     intersect, select, union
-```
-
-```
-## Die folgenden Objekte sind maskiert von 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## Die folgenden Objekte sind maskiert von 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```
-## Lade nötiges Paket: tidyverse
-```
-
-```
-## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-```
-
-```
-## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.5     v stringr 1.4.0
-## v tidyr   1.1.4     v forcats 0.5.1
-## v readr   2.0.2
-```
-
-```
-## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x tidyr::extract() masks raster::extract()
-## x dplyr::filter()  masks stats::filter()
-## x dplyr::lag()     masks stats::lag()
-## x dplyr::select()  masks raster::select()
-```
-
-```
-## Lade nötiges Paket: RStoolbox
-```
-
-```
-## Lade nötiges Paket: randomForest
-```
-
-```
-## randomForest 4.6-14
-```
-
-```
-## Type rfNews() to see new features/changes/bug fixes.
-```
-
-```
-## 
-## Attache Paket: 'randomForest'
-```
-
-```
-## Das folgende Objekt ist maskiert 'package:ggplot2':
-## 
-##     margin
-```
-
-```
-## Das folgende Objekt ist maskiert 'package:dplyr':
-## 
-##     combine
-```
-
-```
-## Lade nötiges Paket: e1071
-```
-
-```
-## 
-## Attache Paket: 'e1071'
-```
-
-```
-## Das folgende Objekt ist maskiert 'package:raster':
-## 
-##     interpolate
-```
-
-```
-## Lade nötiges Paket: caret
-```
-
-```
-## Lade nötiges Paket: lattice
-```
-
-```
-## 
-## Attache Paket: 'caret'
-```
-
-```
-## Das folgende Objekt ist maskiert 'package:purrr':
-## 
-##     lift
-```
-
-```
-## Lade nötiges Paket: lidR
 ```
 
 ```r
@@ -360,42 +198,36 @@ plot(density, col = gray.colors(50,0,1)) # some plotting
 
 <img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
-Next I will use the derived metrics at the voxel level.
-
-
-```r
-vox_met <- voxel_metrics(las, ~list(N = length(Z)), 4) # calculate voxel metrics
-
-plot(vox_met, color="N", colorPalette = heat.colors(50), size = 4, bg = "white", voxel = T)
-```
 
 As mentioned in Greiser et al. (2018) the elevation can influence the microclimate parameters. Because of that I will generate a digital terrain model (DTM).
 
 ```r
-dtm <- grid_terrain(las, res = 1.0, algorithm = lidR::knnidw(k = 6L, p = 2))
-```
+dtm <- lidR::grid_terrain(las, res = 10.0, algorithm = lidR::knnidw(k = 6L, p = 2))
 
-```
-## Warning: There were 3 degenerated ground points. Some X Y coordinates were
-## repeated but with different Z coordinates. min Z were retained.
-```
-
-```r
 dtm
 ```
 
 ```
 ## class      : RasterLayer 
-## dimensions : 250, 250, 62500  (nrow, ncol, ncell)
-## resolution : 1, 1  (x, y)
+## dimensions : 25, 25, 625  (nrow, ncol, ncell)
+## resolution : 10, 10  (x, y)
 ## extent     : 477500, 477750, 5632250, 5632500  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
 ## source     : memory
 ## names      : Z 
-## values     : -0.219, 0.303  (min, max)
+## values     : -0.538, 0.355  (min, max)
 ```
 
+```r
+plot(dtm, col = height.colors(50), main = "DTM 10 m² cells")
+```
 
+<img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+
+##Conclusion 
+
+Finally, I think that the derived metrics, especially at the grid level, can be used to predict the microclimate parameters. There are a lot of standard metrics, which can be used. Also the DTM can be useful to predict the microclimate parameters. 
+There are many others predictors as mentioned above, which can be used to obtain a reliable prediction of the microclimate parameters. In further computations it can be uselful to calculate for example the leaf area index (LAI),the foliage height diversity (FHD) or crown patchness (CP).
 
 ## References
 

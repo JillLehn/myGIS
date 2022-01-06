@@ -51,9 +51,9 @@ They also mentioned the crown patchness (CP), which is an index considered both 
 #-----------------------------
 knitr::knit_global()</code></pre>
 <pre><code>## &lt;environment: R_GlobalEnv&gt;</code></pre>
-<pre class="r"><code>require(envimaR)</code></pre>
-<pre><code>## Lade nötiges Paket: envimaR</code></pre>
-<pre class="r"><code># MANDANTORY: defining the root folder DO NOT change this line
+<pre class="r"><code>require(envimaR)
+
+# MANDANTORY: defining the root folder DO NOT change this line
 rootDIR = &quot;D:/MSc_Physische_Geographie/GIS/edu/agis&quot;
 
 # define  additional packages
@@ -70,66 +70,6 @@ source(file.path(envimaR::alternativeEnvi(root_folder = rootDIR),&quot;src/agis_
 ##  &#39;COMPUTERNAME&#39; is set by defaultvariable alt_env_value is NOT defined
 ##  &#39;PCRZP&#39; is set by defaultvariable alt_env_root_folder is NOT defined
 ##  &#39;F:/BEN/edu&#39; is set by default</code></pre>
-<pre><code>## Lade nötiges Paket: mapview</code></pre>
-<pre><code>## Lade nötiges Paket: mapedit</code></pre>
-<pre><code>## Lade nötiges Paket: tmap</code></pre>
-<pre><code>## Registered S3 methods overwritten by &#39;stars&#39;:
-##   method             from
-##   st_bbox.SpatRaster sf  
-##   st_crs.SpatRaster  sf</code></pre>
-<pre><code>## Lade nötiges Paket: raster</code></pre>
-<pre><code>## Lade nötiges Paket: sp</code></pre>
-<pre><code>## Lade nötiges Paket: sf</code></pre>
-<pre><code>## Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1</code></pre>
-<pre><code>## Lade nötiges Paket: dplyr</code></pre>
-<pre><code>## 
-## Attache Paket: &#39;dplyr&#39;</code></pre>
-<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:raster&#39;:
-## 
-##     intersect, select, union</code></pre>
-<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre><code>## Lade nötiges Paket: tidyverse</code></pre>
-<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
-<pre><code>## v ggplot2 3.3.5     v purrr   0.3.4
-## v tibble  3.1.5     v stringr 1.4.0
-## v tidyr   1.1.4     v forcats 0.5.1
-## v readr   2.0.2</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x tidyr::extract() masks raster::extract()
-## x dplyr::filter()  masks stats::filter()
-## x dplyr::lag()     masks stats::lag()
-## x dplyr::select()  masks raster::select()</code></pre>
-<pre><code>## Lade nötiges Paket: RStoolbox</code></pre>
-<pre><code>## Lade nötiges Paket: randomForest</code></pre>
-<pre><code>## randomForest 4.6-14</code></pre>
-<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
-<pre><code>## 
-## Attache Paket: &#39;randomForest&#39;</code></pre>
-<pre><code>## Das folgende Objekt ist maskiert &#39;package:ggplot2&#39;:
-## 
-##     margin</code></pre>
-<pre><code>## Das folgende Objekt ist maskiert &#39;package:dplyr&#39;:
-## 
-##     combine</code></pre>
-<pre><code>## Lade nötiges Paket: e1071</code></pre>
-<pre><code>## 
-## Attache Paket: &#39;e1071&#39;</code></pre>
-<pre><code>## Das folgende Objekt ist maskiert &#39;package:raster&#39;:
-## 
-##     interpolate</code></pre>
-<pre><code>## Lade nötiges Paket: caret</code></pre>
-<pre><code>## Lade nötiges Paket: lattice</code></pre>
-<pre><code>## 
-## Attache Paket: &#39;caret&#39;</code></pre>
-<pre><code>## Das folgende Objekt ist maskiert &#39;package:purrr&#39;:
-## 
-##     lift</code></pre>
-<pre><code>## Lade nötiges Paket: lidR</code></pre>
 <pre class="r"><code># 1 - start script
 #-----------------------------
 
@@ -198,23 +138,23 @@ plot(metrics, col = height.colors(50))</code></pre>
 <pre class="r"><code>density &lt;- grid_metrics(las, ~length(Z)/1, 1) # calculate density
 plot(density, col = gray.colors(50,0,1)) # some plotting</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>Next I will use the derived metrics at the voxel level.</p>
-<pre class="r"><code>vox_met &lt;- voxel_metrics(las, ~list(N = length(Z)), 4) # calculate voxel metrics
-
-plot(vox_met, color=&quot;N&quot;, colorPalette = heat.colors(50), size = 4, bg = &quot;white&quot;, voxel = T)</code></pre>
 <p>As mentioned in Greiser et al. (2018) the elevation can influence the microclimate parameters. Because of that I will generate a digital terrain model (DTM).</p>
-<pre class="r"><code>dtm &lt;- grid_terrain(las, res = 1.0, algorithm = lidR::knnidw(k = 6L, p = 2))</code></pre>
-<pre><code>## Warning: There were 3 degenerated ground points. Some X Y coordinates were
-## repeated but with different Z coordinates. min Z were retained.</code></pre>
-<pre class="r"><code>dtm</code></pre>
+<pre class="r"><code>dtm &lt;- lidR::grid_terrain(las, res = 10.0, algorithm = lidR::knnidw(k = 6L, p = 2))
+
+dtm</code></pre>
 <pre><code>## class      : RasterLayer 
-## dimensions : 250, 250, 62500  (nrow, ncol, ncell)
-## resolution : 1, 1  (x, y)
+## dimensions : 25, 25, 625  (nrow, ncol, ncell)
+## resolution : 10, 10  (x, y)
 ## extent     : 477500, 477750, 5632250, 5632500  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
 ## source     : memory
 ## names      : Z 
-## values     : -0.219, 0.303  (min, max)</code></pre>
+## values     : -0.538, 0.355  (min, max)</code></pre>
+<pre class="r"><code>plot(dtm, col = height.colors(50), main = &quot;DTM 10 m² cells&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>##Conclusion</p>
+<p>Finally, I think that the derived metrics, especially at the grid level, can be used to predict the microclimate parameters. There are a lot of standard metrics, which can be used. Also the DTM can be useful to predict the microclimate parameters.
+There are many others predictors as mentioned above, which can be used to obtain a reliable prediction of the microclimate parameters. In further computations it can be uselful to calculate for example the leaf area index (LAI),the foliage height diversity (FHD) or crown patchness (CP).</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
