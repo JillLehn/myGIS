@@ -224,7 +224,7 @@ plot(dtm, col = height.colors(50), main = "DTM 10 m² cells")
 
 <img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
-##Conclusion 
+## Conclusion 
 
 Finally, I think that the derived metrics, especially at the grid level, can be used to predict the microclimate parameters. There are a lot of standard metrics, which can be used. Also the DTM can be useful to predict the microclimate parameters. 
 There are many others predictors as mentioned above, which can be used to obtain a reliable prediction of the microclimate parameters. In further computations it can be uselful to calculate for example the leaf area index (LAI),the foliage height diversity (FHD) or crown patchness (CP).
