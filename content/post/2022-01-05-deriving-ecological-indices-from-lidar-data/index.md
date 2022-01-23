@@ -182,7 +182,7 @@ hmean
 The stdmetrics()-function contains metrics that summarize the vertical distribution of points, their intensities, and return structure.
 
 ```r
-metrics <- grid_metrics(las, .stdmetrics, 10) # calculate standard metrics
+metrics <- grid_metrics(las, .stdmetrics, 1) # calculate standard metrics
 plot(metrics, col = height.colors(50))
 ```
 
@@ -193,7 +193,7 @@ With the grid metrics it is also possible to calculate the density. The point de
 
 ```r
 density <- grid_metrics(las, ~length(Z)/1, 1) # calculate density
-plot(density, col = gray.colors(50,0,1)) # some plotting
+plot(density, col = gray.colors(50,0,1), main = "Point density") 
 ```
 
 <img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
@@ -202,31 +202,43 @@ plot(density, col = gray.colors(50,0,1)) # some plotting
 As mentioned in Greiser et al. (2018) the elevation can influence the microclimate parameters. Because of that I will generate a digital terrain model (DTM).
 
 ```r
-dtm <- lidR::grid_terrain(las, res = 10.0, algorithm = lidR::knnidw(k = 6L, p = 2))
+dtm <- grid_terrain(las, res = 1, algorith = tin())
 
 dtm
 ```
 
 ```
 ## class      : RasterLayer 
-## dimensions : 25, 25, 625  (nrow, ncol, ncell)
-## resolution : 10, 10  (x, y)
+## dimensions : 250, 250, 62500  (nrow, ncol, ncell)
+## resolution : 1, 1  (x, y)
 ## extent     : 477500, 477750, 5632250, 5632500  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
 ## source     : memory
 ## names      : Z 
-## values     : -0.538, 0.355  (min, max)
+## values     : -0.241, 0.539  (min, max)
 ```
 
 ```r
-plot(dtm, col = height.colors(50), main = "DTM 10 m² cells")
+plot(dtm, col = height.colors(50), main = "Digital terrain model (1 m² cells)")
 ```
 
 <img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
+A canopy height model (chm) can also be used as a predictor for the microclimate.
+
+
+```r
+chm  <- grid_canopy(las, res = 1, algorithm = p2r())
+
+plot(chm, main = "Canopy height model (m)")
+```
+
+<img src="index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+
+
 ## Conclusion 
 
-Finally, I think that the derived metrics, especially at the grid level, can be used to predict the microclimate parameters. There are a lot of standard metrics, which can be used. Also the DTM can be useful to predict the microclimate parameters. 
+Finally, I think that the derived metrics, especially at the grid level, can be used to predict the microclimate parameters. There are a lot of standard metrics, which can be used. Also the DTM or the canopy height model can be useful to predict the microclimate parameters. 
 There are many others predictors as mentioned above, which can be used to obtain a reliable prediction of the microclimate parameters. In further computations it can be uselful to calculate for example the leaf area index (LAI),the foliage height diversity (FHD) or crown patchness (CP).
 
 ## References
